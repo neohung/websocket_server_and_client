@@ -6,6 +6,7 @@
 #include <string.h>
 #include "sha1.h"
 #include "base64.h"
+#include "uuid.h"
 
 
 char *substring(char *string, int position, int length) 
@@ -160,8 +161,9 @@ int main( int argc, char const *argv[])
     struct sockaddr_in clientAddr ;
     socklen_t clientAddrLen = sizeof (clientAddr);
     char buffer [512];
-
-    fprintf(stdout , "%s\n" ,"Start");
+    char * uuid = random_uuid();
+    fprintf(stdout , "%s, %s\n" ,"Start", uuid);
+    fprintf(stdout , "%s, %s\n" ,"Another", random_uuid());
     serverSock = socket(AF_INET, SOCK_STREAM , 0 );
     if (serverSock == -1 ) {
         fprintf (stderr, "%s\n" ,"open socket fail");

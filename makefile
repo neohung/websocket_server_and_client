@@ -2,7 +2,7 @@ CC = gcc
 INCLUDE = .
 CFLAGS =
 OBJ = server.o
-LIB = libsha1.a libbase64.a
+LIB = libsha1.a libbase64.a libuuid.a
 TARGET = server
 
 %.o: %.c
@@ -14,7 +14,7 @@ TARGET = server
 	ar rcs $@ $<
 
 all: $(OBJ) $(LIB)
-	gcc -o $(TARGET) $(OBJ) -L. -lsha1 -lbase64
+	gcc -o $(TARGET) $(OBJ) -L. -lsha1 -lbase64 -luuid
 
 .PHONY: clean
 clean:
