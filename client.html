@@ -1,0 +1,57 @@
+<html>
+	<body>
+		<script type="text/javascript">
+			function init() {
+				output = document.getElementById("output");
+				var now = new Date();
+				writeToScreen("Now is "+now);
+				addnewline();
+				doWebSocket();
+			}
+			function doWebSocket() {
+				var ws = new WebSocket("ws://192.168.193.130:12345", "chat");
+				ws.onopen = function() {
+					//alert('open');
+					writeToScreen("Connection Open");
+					var message = "connection:neo\r\n"
+					ws.send(message); 
+					writeToScreen("SENT: " + message);	
+				};
+				ws.onmessage = function (evt) {
+					//alert(evt.data);
+					writeToScreen("onmessage: [" + evt.data+"]");
+					if ((n = evt.data.indexOf("connection:")) >= 0){
+						var val = evt.data.substr(n+"connection:".length, evt.data.length);
+						writeToScreen("connection:"+val);
+						var message = "input:xxxxxxxxxxxx\r\n"
+						ws.send(message); 
+					}else if ((n = evt.data.indexOf("input:")) >= 0){
+						var val = evt.data.substr(n+"input:".length, evt.data.length);
+						writeToScreen("input:"+val);
+					}
+				};
+				ws.onclose = function() {
+					alert('close');
+				};
+				ws.onerror = function(evt) {
+					onError(evt);
+				};
+				}
+			function onError(evt) { 
+				writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data); 
+			}  
+			function addnewline() { 
+				writeToScreen('<br>'); 
+			}  
+			function writeToScreen(message) {
+				var pre = document.createElement("p"); 
+				pre.style.wordWrap = "break-word"; 
+				pre.innerHTML = message; 
+				output.appendChild(pre); 
+			}
+			  
+			window.addEventListener("load", init, false);  
+          	</script>
+		<div id="output"></div>  
+	</body>
+</html>
